@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 import {
@@ -17,13 +17,13 @@ import { integerValidator } from '../../shared/validators/integer.validator';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly producer = inject(MarketProducerService);
+  private readonly router = inject(Router);
+
   readonly form;
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly producer: MarketProducerService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     const currentSettings = this.producer.getSettings();
 
     this.form = this.fb.nonNullable.group({

@@ -26,7 +26,6 @@ let paused = false;
 let wasm: WasmExports | undefined;
 
 let outputPtr = 0;
-let outputCapacity = 0;
 
 let timer: ReturnType<typeof setInterval> | undefined;
 
@@ -45,7 +44,7 @@ self.onmessage = (event: MessageEvent<ProducerCommand>) => {
     case 'resume':
       resume(command.runId);
       break;
-   }
+  }
 };
 
 async function start(command: StartCommand): Promise<void> {
@@ -70,7 +69,6 @@ async function start(command: StartCommand): Promise<void> {
 
     const requiredBytes = command.updatesPerBatch * UPDATE_FIELDS * BYTES_PER_FIELD;
 
-    outputCapacity = requiredBytes;
     outputPtr = wasm.alloc(requiredBytes);
 
     if (generation !== initializationGeneration) return;
@@ -152,7 +150,6 @@ function resume(runId: number): void {
 function resetProducerState(): void {
   wasm = undefined;
   outputPtr = 0;
-  outputCapacity = 0;
   paused = false;
 }
 

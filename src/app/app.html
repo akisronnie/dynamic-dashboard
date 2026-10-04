@@ -1,47 +1,20 @@
 <div class="app-shell">
-
-  <!-- Top bar -->
   <header class="topbar">
-
     <div class="brand">
-
-      <div class="brand-mark">
-        RM
-      </div>
-
+      <div class="brand-mark">RM</div>
       <div>
         <strong>Realtime Markets</strong>
         <span>Market data terminal</span>
       </div>
-
     </div>
-
-
     <nav class="navigation">
-
-      <a
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         Dashboard
       </a>
-
-      <a
-        routerLink="/settings"
-        routerLinkActive="active"
-      >
-        Settings
-      </a>
-
+      <a routerLink="/settings" routerLinkActive="active"> Settings </a>
     </nav>
-
   </header>
-
-
-  <!-- Page content -->
   <main class="page-content">
     <router-outlet />
   </main>
-
 </div>
