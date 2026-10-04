@@ -44,7 +44,7 @@ jobs:
         run: npm test -- --watch=false --no-progress
 
       - name: Build Angular
-        run: npm run build
+        run: npm run build -- --base-href /dynamic-dashboard/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
