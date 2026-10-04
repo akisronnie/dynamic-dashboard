@@ -46,6 +46,11 @@ jobs:
       - name: Build Angular
         run: npm run build -- --base-href /dynamic-dashboard/
 
+      - name: Copy WASM
+        run: |
+          mkdir -p dist/dynamic-dashboard/browser/wasm
+          cp wasm/build/release.wasm dist/dynamic-dashboard/browser/wasm/release.wasm
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

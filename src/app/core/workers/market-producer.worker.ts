@@ -149,21 +149,6 @@ function resume(runId: number): void {
   } satisfies ProducerMessage);
 }
 
-// function stop(runId: number): void {
-//   if (runId !== currentRunId) {
-//     return;
-//   }
-//
-//   // Invalidate any pending initWasm() operation.
-//   initializationGeneration++;
-//
-//   stopTimer();
-//
-//   currentRunId = 0;
-//
-//   resetProducerState();
-// }
-
 function resetProducerState(): void {
   wasm = undefined;
   outputPtr = 0;
@@ -181,7 +166,8 @@ function stopTimer(): void {
 }
 
 async function initWasm(): Promise<WasmExports> {
-  const response = await fetch('/wasm/release.wasm');
+  const wasmUrl = new URL('wasm/release.wasm', self.location.href);
+  const response = await fetch(wasmUrl);
 
   if (!response.ok) {
     throw new Error(`Failed to load WASM: ${response.status} ${response.statusText}`);
