@@ -49,6 +49,9 @@ jobs:
       - name: Build Angular
         run: npm run build -- --base-href /dynamic-dashboard/
 
+      - name: Prepare GitHub Pages
+        run: cp dist/dynamic-dashboard/browser/index.html dist/dynamic-dashboard/browser/404.html
+
       - name: Copy WASM
         run: |
           mkdir -p dist/dynamic-dashboard/browser/wasm
