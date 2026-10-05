@@ -1,4 +1,4 @@
-import { MarketUpdate } from './market-update.model';
+import { MarketUpdate } from './market.model';
 
 export interface StartCommand {
   type: 'start';

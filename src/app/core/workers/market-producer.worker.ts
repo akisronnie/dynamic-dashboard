@@ -1,8 +1,12 @@
-import { ProducerCommand, ProducerMessage, StartCommand } from '../models/producer-message.model';
+import {
+  ProducerCommand,
+  ProducerMessage,
+  StartCommand,
+} from '../../models/producer-message.model';
+import { INSTRUMENT_NAMES } from '../../models/producer.model';
 
 const UPDATE_FIELDS = 7;
 const BYTES_PER_FIELD = 4;
-const INSTRUMENT_NAMES = ['ALFA', 'BETA', 'GAMMA', 'DELTA', 'EPSILON'] as const;
 
 type WasmExports = {
   memory: WebAssembly.Memory;
@@ -20,13 +24,9 @@ let currentRunId = 0;
  * It protects against stale async initWasm() completions.
  */
 let initializationGeneration = 0;
-
 let paused = false;
-
 let wasm: WasmExports | undefined;
-
 let outputPtr = 0;
-
 let timer: ReturnType<typeof setInterval> | undefined;
 
 self.onmessage = (event: MessageEvent<ProducerCommand>) => {
@@ -58,20 +58,16 @@ async function start(command: StartCommand): Promise<void> {
   resetProducerState();
 
   try {
-    const wasmInstance = await initWasm();
+    wasm = await initWasm();
 
     // Another start/stop happened while WASM was loading.
     if (generation !== initializationGeneration) {
       return;
     }
 
-    wasm = wasmInstance;
-
     const requiredBytes = command.updatesPerBatch * UPDATE_FIELDS * BYTES_PER_FIELD;
 
     outputPtr = wasm.alloc(requiredBytes);
-
-    if (generation !== initializationGeneration) return;
 
     wasm.initProducer(command.instrumentCount);
 

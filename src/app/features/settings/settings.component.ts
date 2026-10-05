@@ -3,11 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
-import {
-  MarketProducerService,
-  ProducerSettings,
-} from '../../core/services/market-producer.service';
+
 import { integerValidator } from '../../shared/validators/integer.validator';
+import { MarketProducerService } from '../../core/services/market-producer.service';
+import { ProducerSettings } from '../../models/producer.model';
 
 @Component({
   selector: 'app-settings',

@@ -1,18 +1,8 @@
 import { Injectable, signal } from '@angular/core';
+import { INSTRUMENT_NAMES, ProducerSettings, ProducerStatus } from '../../models/producer.model';
+import { InstrumentMetrics, MarketUpdate } from '../../models/market.model';
+import { BatchMessage, ProducerMessage, StartCommand } from '../../models/producer-message.model';
 
-import { MarketUpdate } from '../models/market-update.model';
-import { BatchMessage, ProducerMessage, StartCommand } from '../models/producer-message.model';
-import { InstrumentMetrics } from '../models/instrument-metrics.model';
-
-export interface ProducerSettings {
-  instrumentCount: number;
-  updatesPerBatch: number;
-  batchInterval: number;
-}
-
-const INSTRUMENT_NAMES = ['ALFA', 'BETA', 'GAMMA', 'DELTA', 'EPSILON'] as const;
-
-export type ProducerStatus = 'idle' | 'starting' | 'running' | 'paused' | 'error';
 
 const DEFAULT_SETTINGS: ProducerSettings = {
   instrumentCount: 5,
@@ -28,23 +18,12 @@ export class MarketProducerService {
     new URL('../workers/market-producer.worker', import.meta.url),
     { type: 'module' },
   );
-
-  /**
-   * Every start gets a new run id.
-   *
-   * This protects us from old worker messages arriving
-   * after a new run has already started.
-   */
   private runId = 0;
-
   private readonly settingsState = signal<ProducerSettings>({
     ...DEFAULT_SETTINGS,
   });
-
   private readonly statusState = signal<ProducerStatus>('idle');
-
   private readonly metricsState = signal<InstrumentMetrics[]>([]);
-
   private readonly errorState = signal<string | null>(null);
 
   readonly settings = this.settingsState.asReadonly();
@@ -68,15 +47,6 @@ export class MarketProducerService {
     this.initializeInstruments(DEFAULT_SETTINGS.instrumentCount);
   }
 
-  /**
-   * Starts a completely new producer run.
-   *
-   * Starting always:
-   * - creates a new runId
-   * - clears previous metrics
-   * - initializes all instruments
-   * - starts immediately
-   */
   start(settings: ProducerSettings = this.settingsState()): void {
     this.runId++;
 
@@ -101,13 +71,6 @@ export class MarketProducerService {
     };
 
     this.worker.postMessage(command);
-  }
-
-  /**
-   * Applying settings always starts a new run.
-   */
-  applySettings(settings: ProducerSettings): void {
-    this.start(settings);
   }
 
   pause(): void {
@@ -228,12 +191,6 @@ export class MarketProducerService {
       this.processUpdate(currentMetrics, update);
     }
 
-    /**
-     * No sorting is required.
-     *
-     * Instrument order is defined by initializeInstruments()
-     * and Map preserves insertion order.
-     */
     this.metricsState.set(Array.from(currentMetrics.values()));
 
     if (this.statusState() === 'starting') {

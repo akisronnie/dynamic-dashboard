@@ -17,18 +17,10 @@ import { MarketProducerService } from '../../core/services/market-producer.servi
 })
 export class DashboardComponent {
   private readonly producer = inject(MarketProducerService);
-
-  readonly metrics;
-  readonly status;
-  readonly settings;
-  readonly error;
-
-  constructor() {
-    this.metrics = this.producer.metrics;
-    this.status = this.producer.status;
-    this.settings = this.producer.settings;
-    this.error = this.producer.error;
-  }
+  readonly metrics = this.producer.metrics;
+  readonly status = this.producer.status;
+  readonly settings = this.producer.settings;
+  readonly error = this.producer.error;
 
   get statusLabel(): string {
     switch (this.status()) {
@@ -50,7 +42,7 @@ export class DashboardComponent {
   }
 
   start(): void {
-    this.producer.start(this.producer.getSettings());
+    this.producer.start();
   }
 
   pause(): void {
