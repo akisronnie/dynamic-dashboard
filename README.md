@@ -4,6 +4,9 @@ Realtime Markets is a web dashboard for monitoring a stream of synthetic market 
 
 > This application uses **simulated data**. It does not connect to an exchange or any external market-data provider.
 
+**Live demo:** [akisronnie.github.io/dynamic-dashboard/dashboard](https://akisronnie.github.io/dynamic-dashboard/dashboard)  
+**Repository:** [github.com/akisronnie/dynamic-dashboard](https://github.com/akisronnie/dynamic-dashboard)
+
 ## Features
 
 - Instrument table with last traded price, spread, cumulative volume, VWAP, and order-book imbalance.

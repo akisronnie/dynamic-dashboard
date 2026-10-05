@@ -269,10 +269,6 @@ export class MarketProducerService {
     this.metricsState.set(metrics);
   }
 
-  /**
-   * Returns a stable instrument name for any
-   * supported instrument index.
-   */
   private getInstrumentName(index: number): string {
     return INSTRUMENT_NAMES[index] ?? `INSTRUMENT_${index + 1}`;
   }
@@ -321,19 +317,10 @@ export class MarketProducerService {
     this.statusState.set(status);
   }
 
-  /**
-   * Permanently destroys the worker.
-   *
-   * Normally not needed because this is a root service,
-   * but useful for tests / application teardown.
-   */
   destroy(): void {
     this.runId++;
-
     this.worker.terminate();
-
     this.clearRunState();
-
     this.setStatus('idle');
   }
 }
